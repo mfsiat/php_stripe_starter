@@ -1,5 +1,8 @@
 <?php
 require_once('vendor/autoload.php');
+require_once('config/db.php');
+require_once('lib/pdo_db.php');
+require_once('models/Customer.php');
 
 \Stripe\Stripe::setApiKey('sk_test_51H9tEeBR2rrqIRF2k4gY3pja2kOXONXQoDJ3RIS5A7uyKSIV8rgTMAasZCu5OXN9nZUlOHB4yQflxtMMRWSLcrk900SMV4JkTg');
 
@@ -30,6 +33,20 @@ $charge = \Stripe\Charge::create(array(
   "description" => "Payment",
   "customer" => $customer->id
 ));
+
+// Customer daa 
+$customerData = [
+  'id' => $charge->customer,
+  'first_name' => $first_name,
+  'last_name' => $last_name,
+  'email' => $email
+];
+
+// Instantiate Customer
+$customer = new Customer();
+
+// Add Customer To DB 
+$customer->addCustomer($customerData);
 
 // Prints full data 
 // print_r($charge);
